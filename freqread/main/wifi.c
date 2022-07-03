@@ -6,6 +6,12 @@
 #include "nvs_flash.h"
 #include <string.h>
 
+#include "lwip/err.h"
+#include "lwip/sockets.h"
+#include "lwip/sys.h"
+#include "lwip/netdb.h"
+#include "lwip/dns.h"
+
 
 #include "lwip/err.h"
 #include "lwip/sys.h"
@@ -72,6 +78,46 @@ void wifi_init_softap(void)
              EXAMPLE_ESP_WIFI_SSID, EXAMPLE_ESP_WIFI_PASS, EXAMPLE_ESP_WIFI_CHANNEL);
 }
 
+// connect to the server and return the result
+esp_err_t connect_tcp_server(void)
+{
+	struct sockaddr_in serverInfo = {0};
+	char readBuffer[1024] = {0};
+
+	serverInfo.sin_family = AF_INET;
+	serverInfo.sin_addr.s_addr = 0x0100007f;
+	serverInfo.sin_port = htons(80);
+
+
+	int sock = socket(AF_INET, SOCK_STREAM, 0);
+	if (sock < 0)
+	{
+		ESP_LOGE(TAG, "Failed to create a socket..?");
+		return TCP_FAILURE;
+	}
+
+
+	if (connect(sock, (struct sockaddr *)&serverInfo, sizeof(serverInfo)) != 0)
+	{
+		ESP_LOGE(TAG, "Failed to connect to %s!", inet_ntoa(serverInfo.sin_addr.s_addr));
+		close(sock);
+		return TCP_FAILURE;
+	}
+
+	ESP_LOGI(TAG, "Connected to TCP server.");
+	bzero(readBuffer, sizeof(readBuffer));
+    int r = read(sock, readBuffer, sizeof(readBuffer)-1);
+    for(int i = 0; i < r; i++) {
+        putchar(readBuffer[i]);
+    }
+
+    if (strcmp(readBuffer, "HELLO") == 0)
+    {
+    	ESP_LOGI(TAG, "WE DID IT!");
+    }
+
+    return TCP_SUCCESS;
+}
 
 void wifi_init()
 {

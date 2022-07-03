@@ -5,6 +5,7 @@
 #include "driver/pulse_cnt.h"
 #include "driver/ledc.h"
 #include "wifi.h"
+#include "webserver.h"
 
 static const char *INFO = "INFO";
 
@@ -89,6 +90,7 @@ static void counter_setup(pcnt_unit_handle_t * pcnt_unit) {
 void app_main(void){
     pcnt_unit_handle_t pcnt_unit = NULL;
     counter_setup(&pcnt_unit);
+    esp_err_t status;
 
     // Report counter value
     int pulse_count = 0;
@@ -102,6 +104,8 @@ void app_main(void){
       // ESP_LOGI(INFO, "updating duty");
       ESP_ERROR_CHECK(ledc_update_duty(LEDC_MODE, LEDC_CHANNEL));
 
+    start_webserver();
+
     while (1) {
       ESP_ERROR_CHECK(pcnt_unit_get_count(pcnt_unit, &pulse_count));
       ESP_LOGI(INFO, "Frequency: %d Hz", pulse_count);
@@ -111,4 +115,3 @@ void app_main(void){
     }
 
 }
-
