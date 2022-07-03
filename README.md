@@ -1,6 +1,7 @@
 # E85 content sensor using ESP32
 
-While on nixos: https://github.com/almini/nix-esp32-dev
+## Using NixOS 
+nix --experimental-features 'nix-command flakes' develop github:almini/nix-esp32-dev
 
 ## Peripherals
 
