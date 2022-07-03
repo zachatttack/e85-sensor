@@ -1,9 +1,3 @@
-/*
- * SPDX-FileCopyrightText: 2010-2022 Espressif Systems (Shanghai) CO LTD
- *
- * SPDX-License-Identifier: CC0-1.0
- */
-
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "freertos/queue.h"
@@ -16,7 +10,7 @@ static const char *INFO = "INFO";
 #define EXAMPLE_PCNT_HIGH_LIMIT 300
 #define EXAMPLE_PCNT_LOW_LIMIT -1
 
-#define EXAMPLE_EC11_GPIO_A 0 //button
+// #define EXAMPLE_EC11_GPIO_A 0 //button
 #define EXAMPLE_EC11_GPIO_A 23 
 // #define EXAMPLE_EC11_GPIO_A 1 //pin13 gpi01 tx0
 
